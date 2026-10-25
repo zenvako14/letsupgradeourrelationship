@@ -233,7 +233,7 @@
 
     <!-- 2b. not sleepy, then the poll -->
     <div class="step" id="ans-no" hidden>
-      <h2>არ მეძინება? 😆</h2>
+      <h2>არა, არ მეძინება? კაი, მაშინ მოგწერ 💌</h2>
       <div class="divider" aria-hidden="true"></div>
       <p class="poll-q">ახლა გცალია?</p>
       <div class="choices">
@@ -387,7 +387,7 @@
   });
 
   const picks = {
-    free:  { note: "🤍 მცალია!",               title: "კაი, ახლავე მოგწერ ❤️", text: "", sleepy: false },
+    free:  { note: "🤍 მცალია!",               title: "იდეალურია 🤍",       text: "ახლავე მოგწერ 💌", sleepy: false },
     study: { note: "📚 არ მცალია → ვსწავლობ",   title: "წარმატებები 📚",      text: "არ შეგაწუხებ, მერე მოგწერ 🤍", sleepy: false },
     sleep: { note: "🌙 არ მცალია → ვიძინებ",    title: "კარგად დაიძინე 🌙",   text: "ტკბილი სიზმრები 🤍", sleepy: true },
     dnd:   { note: "🔕 არ მცალია → DND-ზე ვარ", title: "კაი, ჩუმად ვიქნები 🤫", text: "როცა მოიცლი, აქ ვარ 🤍", sleepy: false }
@@ -442,7 +442,6 @@
     }
     document.getElementById("reply-title").textContent = p.title;
     document.getElementById("reply-text").textContent = p.text;
-    document.getElementById("reply-text").hidden = !p.text;
     burstAt(e.currentTarget, 24);
     go("reply", p.sleepy);
     notify(p.note);

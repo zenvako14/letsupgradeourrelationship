@@ -108,7 +108,8 @@
     font-family: var(--font-display);
     font-weight: 800;
     font-size: clamp(2.6rem, 11vw, 3.4rem);
-    line-height: 1.1;
+    line-height: 1.3;
+    padding: 0.05em 0.1em 0.18em;   /* room for Georgian descenders, which the gradient clip would cut off */
     letter-spacing: 0.01em;
     text-wrap: balance;
     background: linear-gradient(180deg, var(--ink) 30%, var(--blush));
@@ -357,7 +358,7 @@
   });
 
   const picks = {
-    free:  { note: "🤍 მცალია!",               title: "იდეალურია 🤍",       text: "ახლავე მოგწერ 💌", sleepy: false },
+    free:  { note: "🤍 მცალია!",               title: "იდეალურია 🤍",       text: "okay<3", sleepy: false },
     study: { note: "📚 არ მცალია → ვსწავლობ",   title: "წარმატებები 📚",      text: "არ შეგაწუხებ, მერე მოგწერ 🤍", sleepy: false },
     sleep: { note: "🌙 არ მცალია → ვიძინებ",    title: "კარგად დაიძინე 🌙",   text: "ტკბილი სიზმრები 🤍", sleepy: true },
     dnd:   { note: "🔕 არ მცალია → DND-ზე ვარ", title: "კაი, ჩუმად ვიქნები 🤫", text: "როცა მოიცლი, აქ ვარ 🤍", sleepy: false }

@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="ka">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>გძინავს?</title>
+<meta property="og:title" content="გძინავს? 🌙">
+<meta property="og:description" content="ერთი პატარა კითხვა შენთვის 🤍">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌙</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Georgian:wght@500;700;800&family=Noto+Sans+Georgian:wght@400;500;600&display=swap">
+<style>
+  /* Layout: one quiet night sky, a single soft card in the middle, hearts drifting up behind it */
+  :root {
+    --sky-top: #1b1033;
+    --sky-bottom: #3a1745;
+    --blush: #ff9cbf;
+    --blush-deep: #e8628f;
+    --moon: #fff1d6;
+    --ink: #fff7fb;
+    --ink-soft: #e6cfe0;
+    --card: rgba(255, 240, 248, 0.08);
+    --card-line: rgba(255, 200, 225, 0.22);
+    --font-display: "Noto Serif Georgian", Georgia, serif;
+    --font-body: "Noto Sans Georgian", system-ui, sans-serif;
+    color-scheme: dark;
+  }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: linear-gradient(170deg, var(--sky-top) 0%, #2a1240 55%, var(--sky-bottom) 100%);
+    background-color: var(--sky-top);
+    color: var(--ink);
+    font-family: var(--font-body);
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+  [hidden] { display: none !important; }
+  #sky { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+
+  .stage {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: max(24px, env(safe-area-inset-top, 0px)) max(24px, env(safe-area-inset-bottom, 0px));
+    box-sizing: border-box;
+    overflow-y: auto;
+  }
+
+  .card {
+    width: min(100%, 420px);
+    box-sizing: border-box;
+    padding: 36px 28px 32px;
+    border-radius: 28px;
+    background: var(--card);
+    border: 1px solid var(--card-line);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 20px 60px rgba(10, 0, 25, 0.45);
+    display: grid;
+    justify-items: center;
+    gap: 22px;
+    text-align: center;
+  }
+
+  .moon {
+    width: 86px; height: 86px;
+    position: relative;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #fffaf0, var(--moon) 60%, #f3d9b0);
+    box-shadow: 0 0 40px rgba(255, 230, 190, 0.55), 0 0 90px rgba(255, 156, 191, 0.25);
+    animation: bob 4s ease-in-out infinite;
+  }
+  .moon .eye {
+    position: absolute; top: 38px; width: 14px; height: 7px;
+    border: 2.5px solid #6b3d55; border-top: none; border-radius: 0 0 14px 14px;
+    background: transparent; transition: all .4s ease;
+  }
+  .moon .eye.l { left: 22px; } .moon .eye.r { right: 22px; }
+  .moon .eye.open {
+    height: 10px; width: 10px; border: none; border-radius: 50%; background: #6b3d55; top: 36px;
+  }
+  .moon .eye.l.open { left: 25px; } .moon .eye.r.open { right: 25px; }
+  .moon .cheek {
+    position: absolute; top: 50px; width: 14px; height: 8px; border-radius: 50%;
+    background: rgba(255, 130, 170, 0.55);
+  }
+  .moon .cheek.l { left: 13px; } .moon .cheek.r { right: 13px; }
+  .moon .mouth {
+    position: absolute; left: 50%; top: 56px; width: 12px; height: 6px; transform: translateX(-50%);
+    border: 2.5px solid #6b3d55; border-top: none; border-radius: 0 0 12px 12px;
+  }
+  .zzz {
+    position: absolute; right: -26px; top: -14px;
+    font-family: var(--font-display); font-weight: 700; color: var(--ink-soft);
+    font-size: 18px; opacity: 0; transition: opacity .4s ease;
+  }
+  .sleepy .zzz { opacity: 1; animation: drift 2.4s ease-in-out infinite; }
+
+  .step { display: grid; gap: 20px; justify-items: center; width: 100%; animation: rise .6s ease both; }
+
+  h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(2.6rem, 11vw, 3.4rem);
+    line-height: 1.1;
+    letter-spacing: 0.01em;
+    text-wrap: balance;
+    background: linear-gradient(180deg, var(--ink) 30%, var(--blush));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.6rem, 7vw, 2rem);
+    line-height: 1.3;
+    text-wrap: balance;
+    color: var(--ink);
+  }
+  .sub, .step p {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    max-width: 30ch;
+    text-wrap: balance;
+  }
+  .sub { margin-top: -8px; }
+
+  .divider { width: 60%; height: 1px; background: var(--card-line); }
+  .poll-q { font-family: var(--font-display); font-weight: 700; font-size: 1.25rem; color: var(--ink); margin: 0; }
+
+  .choices { display: flex; gap: 12px; width: 100%; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    flex: 1 1 130px;
+    max-width: 180px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.3rem;
+    padding: 14px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
+  }
+  .btn.small { font-size: 1.05rem; padding: 12px 16px; flex-basis: 110px; }
+  .btn:active { transform: scale(0.96); }
+  .btn:focus-visible, .chip:focus-visible { outline: 3px solid var(--moon); outline-offset: 3px; }
+  .btn.yes {
+    border: none;
+    color: #3a1030;
+    background: linear-gradient(180deg, #ffc0d6, var(--blush) 60%, var(--blush-deep));
+    box-shadow: 0 8px 24px rgba(232, 98, 143, 0.45);
+  }
+  .btn.yes:hover { box-shadow: 0 10px 30px rgba(232, 98, 143, 0.65); transform: translateY(-2px); }
+  .btn.no {
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1.5px solid var(--card-line);
+  }
+  .btn.no:hover, .btn.no.on { background: rgba(255, 255, 255, 0.14); transform: translateY(-2px); }
+
+  .busy { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; animation: rise .4s ease both; }
+  .chip {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--ink);
+    background: rgba(255, 156, 191, 0.12);
+    border: 1.5px solid rgba(255, 156, 191, 0.4);
+    border-radius: 999px;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: background .2s ease, transform .15s ease;
+  }
+  .chip:hover { background: rgba(255, 156, 191, 0.24); transform: translateY(-2px); }
+  .chip:active { transform: scale(0.96); }
+
+  .again {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    background: none;
+    border: none;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    cursor: pointer;
+    padding: 6px 10px;
+  }
+  .again:focus-visible { outline: 2px solid var(--moon); outline-offset: 2px; border-radius: 6px; }
+
+  @keyframes bob { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-6px) } }
+  @keyframes drift { 0%,100% { transform: translate(0,0) } 50% { transform: translate(4px,-6px) } }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px) } to { opacity: 1; transform: none } }
+  @media (prefers-reduced-motion: reduce) {
+    .moon, .sleepy .zzz, .step, .busy { animation: none; }
+  }
+</style>
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+
+<main class="stage">
+  <section class="card" aria-live="polite">
+    <div class="moon" id="moon" aria-hidden="true">
+      <span class="eye l open"></span><span class="eye r open"></span>
+      <span class="cheek l"></span><span class="cheek r"></span>
+      <span class="mouth"></span>
+      <span class="zzz">z z z</span>
+    </div>
+
+    <!-- 1. the question -->
+    <div class="step" id="ask">
+      <h1>გძინავს?</h1>
+      <p class="sub">მითხარი გულწრფელად 🤍</p>
+      <div class="choices">
+        <button class="btn yes" id="yes" type="button">კი</button>
+        <button class="btn no" id="no" type="button">არა</button>
+      </div>
+    </div>
+
+    <!-- 2a. sleepy -->
+    <div class="step" id="ans-yes" hidden>
+      <h2>ძილი ნებისა 🌙</h2>
+      <p>ტკბილ სიზმრებს გისურვებ. იქნებ მეც დაგესიზმრო 🤍</p>
+      <button class="again" type="button" data-back>თავიდან</button>
+    </div>
+
+    <!-- 2b. not sleepy, then the poll -->
+    <div class="step" id="ans-no" hidden>
+      <h2>არა, არ მეძინება? კაი, მაშინ მოგწერ 💌</h2>
+      <div class="divider" aria-hidden="true"></div>
+      <p class="poll-q">ახლა გცალია?</p>
+      <div class="choices">
+        <button class="btn yes small" type="button" data-pick="free">მცალია 🤍</button>
+        <button class="btn no small" type="button" id="busy-toggle">არ მცალია</button>
+      </div>
+      <div class="busy" id="busy" hidden>
+        <button class="chip" type="button" data-pick="study">ვსწავლობ 📚</button>
+        <button class="chip" type="button" data-pick="sleep">ვიძინებ 🌙</button>
+        <button class="chip" type="button" data-pick="dnd">DND-ზე ვარ 🔕</button>
+      </div>
+      <button class="again" type="button" data-back>თავიდან</button>
+    </div>
+
+    <!-- 3. reply to the poll -->
+    <div class="step" id="reply" hidden>
+      <h2 id="reply-title"></h2>
+      <p id="reply-text"></p>
+      <button class="again" type="button" data-back>თავიდან</button>
+    </div>
+  </section>
+</main>
+
+<script>
+(() => {
+  // every answer is sent here as a push notification (ntfy app → subscribe to this topic)
+  const TOPIC = "https://ntfy.sh/gdzinavs-9b4868b39019";
+  function notify(msg) {
+    try { fetch(TOPIC, { method: "POST", body: msg, keepalive: true }).catch(() => {}); } catch {}
+  }
+
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const canvas = document.getElementById("sky");
+  const ctx = canvas.getContext("2d");
+  let W = 0, H = 0, dpr = 1;
+  const stars = [], hearts = [], bursts = [];
+  const pinks = ["#ff9cbf", "#ffb8d1", "#e8628f", "#ffd1e1", "#f7a8c8"];
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = innerWidth; H = innerHeight;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    stars.length = 0;
+    const n = Math.round((W * H) / 5000);
+    for (let i = 0; i < n; i++) {
+      stars.push({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.3 + 0.3, t: Math.random() * Math.PI * 2, s: 0.01 + Math.random() * 0.03 });
+    }
+  }
+
+  function newHeart(y) {
+    return {
+      x: Math.random() * W,
+      y: y ?? H + 20,
+      size: 8 + Math.random() * 16,
+      vy: 0.25 + Math.random() * 0.6,
+      sway: Math.random() * Math.PI * 2,
+      color: pinks[(Math.random() * pinks.length) | 0],
+      alpha: 0.25 + Math.random() * 0.45
+    };
+  }
+
+  function drawHeart(x, y, s, color, alpha) {
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = color;
+    ctx.translate(x, y);
+    ctx.scale(s / 16, s / 16);
+    ctx.beginPath();
+    ctx.moveTo(0, 4);
+    ctx.bezierCurveTo(0, 0, -8, -6, -8, 1);
+    ctx.bezierCurveTo(-8, 6, -2, 9, 0, 12);
+    ctx.bezierCurveTo(2, 9, 8, 6, 8, 1);
+    ctx.bezierCurveTo(8, -6, 0, 0, 0, 4);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function burst(x, y, count = 22) {
+    for (let i = 0; i < count; i++) {
+      const a = Math.random() * Math.PI * 2, sp = 2 + Math.random() * 4;
+      bursts.push({ x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 1.5, size: 8 + Math.random() * 12, life: 1, color: pinks[(Math.random() * pinks.length) | 0] });
+    }
+    if (reduce) frame();
+  }
+  function burstAt(el, count) {
+    const r = el.getBoundingClientRect();
+    burst(r.left + r.width / 2, r.top + r.height / 2, count);
+  }
+
+  function frame() {
+    ctx.clearRect(0, 0, W, H);
+    for (const st of stars) {
+      st.t += st.s;
+      ctx.globalAlpha = 0.35 + Math.sin(st.t) * 0.35 + 0.3;
+      ctx.fillStyle = "#fff7e8";
+      ctx.beginPath(); ctx.arc(st.x, st.y, st.r, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    for (let i = 0; i < hearts.length; i++) {
+      const h = hearts[i];
+      h.y -= h.vy; h.sway += 0.02;
+      drawHeart(h.x + Math.sin(h.sway) * 14, h.y, h.size, h.color, h.alpha);
+      if (h.y < -30) hearts[i] = newHeart();
+    }
+    for (let i = bursts.length - 1; i >= 0; i--) {
+      const b = bursts[i];
+      b.x += b.vx; b.y += b.vy; b.vy += 0.08; b.life -= 0.018;
+      if (b.life <= 0) { bursts.splice(i, 1); continue; }
+      drawHeart(b.x, b.y, b.size, b.color, b.life);
+    }
+    if (!reduce) requestAnimationFrame(frame);
+  }
+
+  resize();
+  const heartCount = Math.max(14, Math.round(W / 40));
+  for (let i = 0; i < heartCount; i++) hearts.push(newHeart(Math.random() * H));
+  addEventListener("resize", () => { resize(); if (reduce) frame(); });
+  frame();
+
+  // flow
+  const steps = ["ask", "ans-yes", "ans-no", "reply"].map(id => document.getElementById(id));
+  const moon = document.getElementById("moon");
+  const eyes = moon.querySelectorAll(".eye");
+  const busy = document.getElementById("busy");
+  const busyToggle = document.getElementById("busy-toggle");
+
+  function go(id, sleepy = false) {
+    steps.forEach(s => s.hidden = s.id !== id);
+    moon.classList.toggle("sleepy", sleepy);
+    eyes.forEach(e => e.classList.toggle("open", !sleepy));
+  }
+
+  document.getElementById("yes").addEventListener("click", e => {
+    go("ans-yes", true);
+    burstAt(e.currentTarget, 18);
+    notify("😴 გძინავს? → კი, მეძინება");
+  });
+  document.getElementById("no").addEventListener("click", e => {
+    go("ans-no");
+    burstAt(e.currentTarget, 30);
+    notify("🙈 გძინავს? → არა, არ მეძინება");
+  });
+
+  busyToggle.addEventListener("click", () => {
+    busy.hidden = !busy.hidden;
+    busyToggle.classList.toggle("on", !busy.hidden);
+  });
+
+  const picks = {
+    free:  { note: "🤍 მცალია!",               title: "იდეალურია 🤍",       text: "ახლავე მოგწერ 💌", sleepy: false },
+    study: { note: "📚 არ მცალია → ვსწავლობ",   title: "წარმატებები 📚",      text: "არ შეგაწუხებ, მერე მოგწერ 🤍", sleepy: false },
+    sleep: { note: "🌙 არ მცალია → ვიძინებ",    title: "კარგად დაიძინე 🌙",   text: "ტკბილი სიზმრები 🤍", sleepy: true },
+    dnd:   { note: "🔕 არ მცალია → DND-ზე ვარ", title: "კაი, ჩუმად ვიქნები 🤫", text: "როცა მოიცლი, აქ ვარ 🤍", sleepy: false }
+  };
+  document.querySelectorAll("[data-pick]").forEach(b => b.addEventListener("click", e => {
+    const p = picks[b.dataset.pick];
+    document.getElementById("reply-title").textContent = p.title;
+    document.getElementById("reply-text").textContent = p.text;
+    burstAt(e.currentTarget, 24);
+    go("reply", p.sleepy);
+    notify(p.note);
+  }));
+
+  document.querySelectorAll("[data-back]").forEach(b => b.addEventListener("click", () => {
+    busy.hidden = true;
+    busyToggle.classList.remove("on");
+    go("ask");
+  }));
+
+  // tap anywhere for a few hearts
+  addEventListener("pointerdown", e => {
+    if (e.target.closest("button")) return;
+    burst(e.clientX, e.clientY, 8);
+  });
+
+  notify("👀 საიტი გახსნა");
+})();
+</script>
+</body>
+</html>

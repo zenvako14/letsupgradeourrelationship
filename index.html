@@ -261,7 +261,10 @@
 (() => {
   // every answer is sent here as a push notification (ntfy app → subscribe to this topic)
   const TOPIC = "https://ntfy.sh/gdzinavs-9b4868b39019";
+  // ?preview = my own look at the busy auto-reply: always busy, no notifications
+  const PREVIEW = new URLSearchParams(location.search).has("preview");
   function notify(msg) {
+    if (PREVIEW) return;
     try { fetch(TOPIC, { method: "POST", body: msg, keepalive: true }).catch(() => {}); } catch {}
   }
 
@@ -428,7 +431,7 @@
   document.querySelectorAll("[data-pick]").forEach(b => b.addEventListener("click", e => {
     const pick = b.dataset.pick;
     let p = picks[pick];
-    const until = pick === "free" ? busyUntil() : null;
+    const until = pick === "free" ? (PREVIEW ? "13:30" : busyUntil()) : null;
     if (until) {
       p = {
         title: "სამწუხაროდ, ახლა მე არ მცალია 🥺",

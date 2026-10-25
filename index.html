@@ -133,6 +133,7 @@
     text-wrap: balance;
   }
   .sub { margin-top: -8px; }
+  .sub.envelope { font-size: 2.4rem; line-height: 1; margin-top: -12px; }
 
   .divider { width: 60%; height: 1px; background: var(--card-line); }
   .poll-q { font-family: var(--font-display); font-weight: 700; font-size: 1.25rem; color: var(--ink); margin: 0; }
@@ -218,7 +219,7 @@
     <!-- 1. the question -->
     <div class="step" id="ask">
       <h1>გცალია?</h1>
-      <p class="sub">უბრალოდ მაინტერესებს 🙈</p>
+      <p class="sub envelope" aria-hidden="true">💌</p>
       <div class="choices">
         <button class="btn yes" type="button" data-pick="free">მცალია 🤍</button>
         <button class="btn no" type="button" id="busy-toggle">არ მცალია</button>

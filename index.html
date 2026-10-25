@@ -216,39 +216,20 @@
 
     <!-- 1. the question -->
     <div class="step" id="ask">
-      <h1>გძინავს?</h1>
+      <h1>გცალია?</h1>
       <p class="sub">მითხარი გულწრფელად 🤍</p>
       <div class="choices">
-        <button class="btn yes" id="yes" type="button">კი</button>
-        <button class="btn no" id="no" type="button">არა</button>
-      </div>
-    </div>
-
-    <!-- 2a. sleepy -->
-    <div class="step" id="ans-yes" hidden>
-      <h2>ძილი ნებისა 🌙</h2>
-      <p>ტკბილ სიზმრებს გისურვებ. იქნებ მეც დაგესიზმრო 🤍</p>
-      <button class="again" type="button" data-back>თავიდან</button>
-    </div>
-
-    <!-- 2b. not sleepy, then the poll -->
-    <div class="step" id="ans-no" hidden>
-      <h2>არა, არ მეძინება? კაი, მაშინ მოგწერ 💌</h2>
-      <div class="divider" aria-hidden="true"></div>
-      <p class="poll-q">ახლა გცალია?</p>
-      <div class="choices">
-        <button class="btn yes small" type="button" data-pick="free">მცალია 🤍</button>
-        <button class="btn no small" type="button" id="busy-toggle">არ მცალია</button>
+        <button class="btn yes" type="button" data-pick="free">მცალია 🤍</button>
+        <button class="btn no" type="button" id="busy-toggle">არ მცალია</button>
       </div>
       <div class="busy" id="busy" hidden>
         <button class="chip" type="button" data-pick="study">ვსწავლობ 📚</button>
         <button class="chip" type="button" data-pick="sleep">ვიძინებ 🌙</button>
         <button class="chip" type="button" data-pick="dnd">DND-ზე ვარ 🔕</button>
       </div>
-      <button class="again" type="button" data-back>თავიდან</button>
     </div>
 
-    <!-- 3. reply to the poll -->
+    <!-- 2. reply to the poll -->
     <div class="step" id="reply" hidden>
       <h2 id="reply-title"></h2>
       <p id="reply-text"></p>
@@ -358,7 +339,7 @@
   frame();
 
   // flow
-  const steps = ["ask", "ans-yes", "ans-no", "reply"].map(id => document.getElementById(id));
+  const steps = ["ask", "reply"].map(id => document.getElementById(id));
   const moon = document.getElementById("moon");
   const eyes = moon.querySelectorAll(".eye");
   const busy = document.getElementById("busy");
@@ -369,17 +350,6 @@
     moon.classList.toggle("sleepy", sleepy);
     eyes.forEach(e => e.classList.toggle("open", !sleepy));
   }
-
-  document.getElementById("yes").addEventListener("click", e => {
-    go("ans-yes", true);
-    burstAt(e.currentTarget, 18);
-    notify("😴 გძინავს? → კი, მეძინება");
-  });
-  document.getElementById("no").addEventListener("click", e => {
-    go("ans-no");
-    burstAt(e.currentTarget, 30);
-    notify("🙈 გძინავს? → არა, არ მეძინება");
-  });
 
   busyToggle.addEventListener("click", () => {
     busy.hidden = !busy.hidden;

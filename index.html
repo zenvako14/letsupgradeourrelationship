@@ -389,8 +389,53 @@
     sleep: { note: "🌙 არ მცალია → ვიძინებ",    title: "კარგად დაიძინე 🌙",   text: "ტკბილი სიზმრები 🤍", sleepy: true },
     dnd:   { note: "🔕 არ მცალია → DND-ზე ვარ", title: "კაი, ჩუმად ვიქნები 🤫", text: "როცა მოიცლი, აქ ვარ 🤍", sleepy: false }
   };
+  // my busy hours (Tbilisi time): if she's free but I'm not, she gets the auto-reply
+  const BUSY = [
+    { days: [1], from: "09:00", to: "15:00" },                    // ორშაბათი
+    { days: [2], from: "11:15", to: "13:30" },                    // სამშაბათი
+    { days: [4], from: "12:00", to: "15:00" },                    // ხუთშაბათი
+    { days: [0, 1, 2, 3, 4, 5, 6], from: "06:00", to: "10:00" }   // ყოველ დილით
+  ];
+  const toMin = s => { const [h, m] = s.split(":"); return h * 60 + +m; };
+  const toHHMM = n => String(Math.floor(n / 60)).padStart(2, "0") + ":" + String(n % 60).padStart(2, "0");
+  function tbilisiNow() {
+    const parts = new Intl.DateTimeFormat("en-US", { timeZone: "Asia/Tbilisi", weekday: "short", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(new Date());
+    const get = t => parts.find(p => p.type === t).value;
+    return { day: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(get("weekday")), min: +get("hour") * 60 + +get("minute") };
+  }
+  // returns "HH:MM" when I'm free again, or null if I'm free now
+  function busyUntil({ day, min } = tbilisiNow()) {
+    const today = BUSY.filter(b => b.days.includes(day));
+    let end = null;
+    for (const b of today) if (min >= toMin(b.from) && min < toMin(b.to)) end = Math.max(end ?? 0, toMin(b.to));
+    if (end === null) return null;
+    let grew = true;
+    while (grew) {   // back-to-back windows (Monday 06–10 then 09–15) count as one
+      grew = false;
+      for (const b of today) if (toMin(b.from) <= end && toMin(b.to) > end) { end = toMin(b.to); grew = true; }
+    }
+    return toHHMM(end);
+  }
+
+  const autoReplies = [
+    "მაგრამ შენზე ვფიქრობ 🤍 როგორც კი მოვიცლი, პირველი შენ მოგწერ",
+    "ცოტა მოიცადე, ღირს ლოდინად 😌 მერე მთელი ჩემი დრო შენია",
+    "ახლა დაკავებული ვარ, მაგრამ შენი შეტყობინება ჩემი დღის საუკეთესო ნაწილი იქნება 💌",
+    "ეს ცოტა ხანი მომენატრები 🥺 მალე მოგწერ, დამელოდე"
+  ];
+
   document.querySelectorAll("[data-pick]").forEach(b => b.addEventListener("click", e => {
-    const p = picks[b.dataset.pick];
+    const pick = b.dataset.pick;
+    let p = picks[pick];
+    const until = pick === "free" ? busyUntil() : null;
+    if (until) {
+      p = {
+        title: "სამწუხაროდ, ახლა მე არ მცალია 🥺",
+        text: autoReplies[(Math.random() * autoReplies.length) | 0] + " · " + until + "-ზე მოვიცლი 🤍",
+        note: "🤍 მცალია! (ავტოპასუხი მიიღო: შენ " + until + "-მდე არ გცალია)",
+        sleepy: false
+      };
+    }
     document.getElementById("reply-title").textContent = p.title;
     document.getElementById("reply-text").textContent = p.text;
     burstAt(e.currentTarget, 24);
